@@ -587,19 +587,19 @@
         <div class="form-grid">
           <div class="full">
             <label for="f-name">Full name</label>
-            <input id="f-name" name="name" type="text" placeholder="Your name" autocomplete="name" required>
+            <input id="f-name" name="name" type="text" placeholder="Your name" autocomplete="name" maxlength="100" required>
           </div>
           <div>
             <label for="f-email">Email</label>
-            <input id="f-email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+            <input id="f-email" name="email" type="email" placeholder="you@example.com" autocomplete="email" maxlength="254" required>
           </div>
           <div>
             <label for="f-phone">Phone</label>
-            <input id="f-phone" name="phone" type="tel" placeholder="9XXXXXXXXX" autocomplete="tel" required>
+            <input id="f-phone" name="phone" type="tel" placeholder="9XXXXXXXXX" autocomplete="tel" inputmode="numeric" pattern="[0-9+() -]{7,20}" maxlength="20" required>
           </div>
           <div>
             <label for="f-branch">Branch / Course</label>
-            <input id="f-branch" name="branch" type="text" placeholder="e.g. CSE, B.Com">
+            <input id="f-branch" name="branch" type="text" placeholder="e.g. CSE, B.Com" maxlength="80">
           </div>
           <div>
             <label for="f-guests">Coming with</label>
@@ -610,6 +610,9 @@
             </select>
           </div>
         </div>
+        <label for="form-website" class="visually-hidden">Leave this field empty</label>
+        <input id="form-website" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
+        <input type="hidden" name="_subject" value="Eclipse Noir RSVP">
         <div class="form-actions">
           <button type="submit" class="btn solid" id="submit-btn">Confirm my spot</button>
           <span class="form-note">Takes less than a minute.</span>
@@ -746,6 +749,10 @@
         isOwnerOrEditor = (userCap.isOwner && userCap.isOwner()) || (userCap.canEdit && userCap.canEdit());
       }
     } catch(e){ isOwnerOrEditor = false; }
+    if (!isOwnerOrEditor){
+      toggle.hidden = true;
+      return;
+    }
     toggle.addEventListener('click', function(){
       var panel = document.getElementById('admin-panel');
       var wasOpen = panel.classList.contains('open');
@@ -753,9 +760,6 @@
       if (!wasOpen) loadAdminTable();
       if (!wasOpen) panel.scrollIntoView({behavior:'smooth', block:'start'});
     });
-    // Toggle is always available (works from local fallback too);
-    // when signed in as owner/editor, db data is visible; otherwise
-    // it shows whatever this browser has recorded locally.
   }
 
   async function loadAdminTable(){
@@ -822,9 +826,22 @@
       errorEl.textContent = 'That email address doesn\'t look right.';
       return;
     }
+    if (name.length > 100 || branch.length > 80 || phone.length > 20){
+      errorEl.textContent = 'Please keep the entered details within the allowed length.';
+      return;
+    }
+    if (!/^[0-9+() -]{7,20}$/.test(phone)){
+      errorEl.textContent = 'Please enter a valid phone number.';
+      return;
+    }
 
     submitBtn.disabled = true;
     submitBtn.textContent = 'Confirming…';
+
+    if (window.location.protocol === 'file:'){
+      form.submit();
+      return;
+    }
 
     var entry = {
       name: name,
