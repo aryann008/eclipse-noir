@@ -7,9 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,500&family=Jost:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-<!-- Firebase SDK for phone number OTP verification -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<!-- EmailJS SDK for email OTP verification -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
 
   :root {
@@ -400,7 +399,8 @@
     border: 1px solid var(--panel-line);
     border-radius: var(--radius-m);
     padding: 40px clamp(20px, 5vw, 48px);
-  }
+  }b.  =
+   
   .rsvp-top { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px; margin-bottom: 32px; }
   .guest-counter { text-align: right; color: var(--ink-faint); font-size: 0.82rem; }
   .guest-counter strong { display: block; font-family: var(--serif); font-size: 1.6rem; color: var(--gold-bright); }
@@ -823,23 +823,23 @@
           </div>
           <div>
             <label for="f-email">Email</label>
-            <input id="f-email" name="email" type="email" placeholder="you@example.com" autocomplete="email" maxlength="254" required>
-          </div>
-          <div>
-            <label for="f-phone">Phone (with country code)</label>
             <div class="phone-row">
-              <input id="f-phone" name="phone" type="tel" placeholder="+919XXXXXXXXX" autocomplete="tel" inputmode="tel" maxlength="20" required>
-              <button type="button" class="btn-otp" id="send-otp-btn">Send OTP</button>
+              <input id="f-email" name="email" type="email" placeholder="you@example.com" autocomplete="email" maxlength="254" required>
+              <button type="button" class="btn-otp" id="send-otp-btn">Send code</button>
             </div>
             <p class="otp-status" id="otp-send-status"></p>
             <div class="otp-block" id="otp-block">
-              <label for="f-otp">Enter OTP</label>
+              <label for="f-otp">Enter code (sent to your email)</label>
               <div class="phone-row">
                 <input id="f-otp" type="text" inputmode="numeric" maxlength="6" placeholder="6-digit code">
                 <button type="button" class="btn-otp" id="verify-otp-btn">Verify</button>
               </div>
               <p class="otp-status" id="otp-verify-status"></p>
             </div>
+          </div>
+          <div>
+            <label for="f-phone">Phone (with country code)</label>
+            <input id="f-phone" name="phone" type="tel" placeholder="+919XXXXXXXXX" autocomplete="tel" inputmode="tel" maxlength="20" required>
           </div>
           <div>
             <label for="f-branch">Branch / Course</label>
@@ -891,10 +891,9 @@
         <label for="form-website" class="visually-hidden">Leave this field empty</label>
         <input id="form-website" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
         <input type="hidden" name="_subject" value="Eclipse Noir RSVP">
-        <input type="hidden" name="phone_verified" id="phone-verified-field" value="no">
+        <input type="hidden" name="email_verified" id="phone-verified-field" value="no">
         <input type="hidden" name="payment_status" id="payment-status" value="pending">
         <input type="hidden" name="payment_token" id="payment-token" value="">
-        <div id="recaptcha-container"></div>
         <div class="form-actions">
           <button type="submit" class="btn solid" id="submit-btn" disabled>Confirm my spot</button>
           <span class="form-note">Verify your phone number above first.</span>
@@ -1081,31 +1080,29 @@
     });
   }
 
-  // ---------- Phone OTP verification (Firebase) ----------
-  // TODO: replace with YOUR Firebase project's web config (from
-  // Firebase Console → Project settings → Your apps → Web app).
-  // These values are safe to expose publicly; they are not secret keys.
-  var firebaseConfig = {
-    apiKey: "PASTE_YOUR_API_KEY",
-    authDomain: "PASTE_YOUR_PROJECT.firebaseapp.com",
-    projectId: "PASTE_YOUR_PROJECT_ID",
-    storageBucket: "PASTE_YOUR_PROJECT.appspot.com",
-    messagingSenderId: "PASTE_YOUR_SENDER_ID",
-    appId: "PASTE_YOUR_APP_ID"
+  // ---------- Email code verification (EmailJS) ----------
+  // TODO: replace with YOUR EmailJS account details (from emailjs.com
+  // dashboard → Email Services / Email Templates / Account → API Keys).
+  // The public key is safe to expose publicly; it is not a secret key.
+  var emailjsConfig = {
+    publicKey: "P7Eb1AwG7GEF48Lmh",
+    serviceId: "service_nis51v2",
+    templateId: "template_noil4zv"
   };
 
-  var phoneVerified = false;
-  var confirmationResult = null;
-  var firebaseReady = false;
+  var emailVerified = false;
+  var emailjsReady = false;
+  var pendingCode = null;
+  var pendingEmail = null;
 
   try {
-    if (window.firebase && firebaseConfig.apiKey.indexOf('PASTE_') === -1){
-      firebase.initializeApp(firebaseConfig);
-      firebaseReady = true;
+    if (window.emailjs && emailjsConfig.publicKey.indexOf('PASTE_') === -1){
+      emailjs.init({ publicKey: emailjsConfig.publicKey });
+      emailjsReady = true;
     }
-  } catch(e){ firebaseReady = false; }
+  } catch(e){ emailjsReady = false; }
 
-  var phoneInput = document.getElementById('f-phone');
+  var emailInput = document.getElementById('f-email');
   var otpInput = document.getElementById('f-otp');
   var sendOtpBtn = document.getElementById('send-otp-btn');
   var verifyOtpBtn = document.getElementById('verify-otp-btn');
@@ -1116,11 +1113,15 @@
   function setSubmitEnabled(enabled){
     submitBtn.disabled = !enabled;
     var note = document.querySelector('.form-note');
-    if (note) note.textContent = enabled ? 'Takes less than a minute.' : 'Verify your phone number above first.';
+    if (note) note.textContent = enabled ? 'Takes less than a minute.' : 'Verify your email above first.';
   }
 
   function generateToken(){
     return 'EN26-' + Math.random().toString(36).slice(2, 6).toUpperCase() + Math.floor(Math.random()*90+10);
+  }
+
+  function generateOtpCode(){
+    return String(Math.floor(100000 + Math.random() * 900000));
   }
 
   function setPaymentState(mode, status, token){
@@ -1185,23 +1186,23 @@
         '    </div>',
         '    <div>',
         '      <label for="friend-' + idx + '-email">Friend ' + idx + ' email</label>',
-        '      <input id="friend-' + idx + '-email" name="friend_' + idx + '_email" type="email" maxlength="254" placeholder="friend' + idx + '@example.com" required>',
-        '    </div>',
-        '    <div>',
-        '      <label for="friend-' + idx + '-phone">Friend ' + idx + ' phone</label>',
         '      <div class="phone-row">',
-        '        <input id="friend-' + idx + '-phone" name="friend_' + idx + '_phone" type="tel" maxlength="20" placeholder="+919XXXXXXXXX" required>',
-        '        <button type="button" class="btn-otp" data-guest-index="' + idx + '" data-action="send">Send OTP</button>',
+        '        <input id="friend-' + idx + '-email" name="friend_' + idx + '_email" type="email" maxlength="254" placeholder="friend' + idx + '@example.com" required>',
+        '        <button type="button" class="btn-otp" data-guest-index="' + idx + '" data-action="send">Send code</button>',
         '      </div>',
         '      <p class="otp-status" id="friend-' + idx + '-send-status"></p>',
         '      <div class="otp-block" id="friend-' + idx + '-otp-block">',
-        '        <label for="friend-' + idx + '-otp">Enter OTP for friend ' + idx + '</label>',
+        '        <label for="friend-' + idx + '-otp">Enter code for friend ' + idx + '</label>',
         '        <div class="phone-row">',
         '          <input id="friend-' + idx + '-otp" type="text" inputmode="numeric" maxlength="6" placeholder="6-digit code">',
         '          <button type="button" class="btn-otp" data-guest-index="' + idx + '" data-action="verify">Verify</button>',
         '        </div>',
         '        <p class="otp-status" id="friend-' + idx + '-verify-status"></p>',
         '      </div>',
+        '    </div>',
+        '    <div>',
+        '      <label for="friend-' + idx + '-phone">Friend ' + idx + ' phone</label>',
+        '      <input id="friend-' + idx + '-phone" name="friend_' + idx + '_phone" type="tel" maxlength="20" placeholder="+919XXXXXXXXX" required>',
         '    </div>',
         '    <div>',
         '      <label for="friend-' + idx + '-branch">Friend ' + idx + ' branch</label>',
@@ -1211,15 +1212,6 @@
         '</div>'
       ].join(''));
     }
-  }
-
-  function getRecaptcha(){
-    if (!window.recaptchaVerifier){
-      window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-        size: 'invisible'
-      });
-    }
-    return window.recaptchaVerifier;
   }
 
   document.getElementById('f-guests').addEventListener('change', renderCompanionFields);
@@ -1314,32 +1306,37 @@
     sendOtpBtn.addEventListener('click', async function(){
       sendStatus.textContent = '';
       sendStatus.className = 'otp-status';
-      var phone = phoneInput.value.trim();
+      var email = emailInput.value.trim();
 
-      if (!/^\+[1-9]\d{7,14}$/.test(phone)){
-        sendStatus.textContent = 'Country code ke saath poora number likho, jaise +919876543210';
-        sendStatus.className = 'otp-status';
+      var emailOkCheck = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      if (!emailOkCheck){
+        sendStatus.textContent = 'Pehle ek valid email address likho.';
         return;
       }
-      if (!firebaseReady){
-        sendStatus.textContent = 'OTP service abhi set up nahi hua hai. (Site owner: Firebase config daalna baaki hai.)';
+      if (!emailjsReady){
+        sendStatus.textContent = 'Email verification abhi set up nahi hua hai. (Site owner: EmailJS config daalna baaki hai.)';
         return;
       }
 
       sendOtpBtn.disabled = true;
       sendOtpBtn.textContent = 'Sending…';
       try {
-        var appVerifier = getRecaptcha();
-        confirmationResult = await firebase.auth().signInWithPhoneNumber(phone, appVerifier);
+        var code = generateOtpCode();
+        await emailjs.send(emailjsConfig.serviceId, emailjsConfig.templateId, {
+          to_email: email,
+          otp_code: code
+        });
+        pendingCode = code;
+        pendingEmail = email;
         otpBlock.classList.add('show');
-        sendStatus.textContent = 'OTP bhej diya gaya hai.';
+        sendStatus.textContent = 'Code aapke email pe bhej diya gaya hai.';
         sendStatus.className = 'otp-status ok';
       } catch(e){
-        sendStatus.textContent = 'OTP bhejne mein dikkat hui: ' + (e && e.message ? e.message : 'try again');
+        sendStatus.textContent = 'Code bhejne mein dikkat hui: ' + (e && e.text ? e.text : 'try again');
         sendStatus.className = 'otp-status';
       }
       sendOtpBtn.disabled = false;
-      sendOtpBtn.textContent = 'Resend OTP';
+      sendOtpBtn.textContent = 'Resend code';
     });
   }
 
@@ -1349,26 +1346,25 @@
       verifyStatus.className = 'otp-status';
       var code = otpInput.value.trim();
       if (!code || code.length < 4){
-        verifyStatus.textContent = 'Valid OTP daalo.';
+        verifyStatus.textContent = 'Valid code daalo.';
         return;
       }
-      if (!confirmationResult){
-        verifyStatus.textContent = 'Pehle "Send OTP" dabao.';
+      if (!pendingCode){
+        verifyStatus.textContent = 'Pehle "Send code" dabao.';
         return;
       }
       verifyOtpBtn.disabled = true;
       verifyOtpBtn.textContent = 'Verifying…';
-      try {
-        await confirmationResult.confirm(code);
-        phoneVerified = true;
-        verifyStatus.textContent = 'Phone verified ✓';
+      if (code === pendingCode && emailInput.value.trim() === pendingEmail){
+        emailVerified = true;
+        verifyStatus.textContent = 'Email verified ✓';
         verifyStatus.className = 'otp-status ok';
-        phoneInput.setAttribute('readonly', 'readonly');
+        emailInput.setAttribute('readonly', 'readonly');
         var verifiedField = document.getElementById('phone-verified-field');
         if (verifiedField) verifiedField.value = 'yes';
         setSubmitEnabled(true);
-      } catch(e){
-        verifyStatus.textContent = 'Galat OTP. Dobara try karo.';
+      } else {
+        verifyStatus.textContent = 'Galat code. Dobara try karo.';
         verifyStatus.className = 'otp-status';
       }
       verifyOtpBtn.disabled = false;
@@ -1384,69 +1380,74 @@
     var guestIndex = Number(target.dataset.guestIndex || 0);
     if (!guestIndex || !action) return;
 
-    var phoneField = document.getElementById('friend-' + guestIndex + '-phone');
+    var emailField = document.getElementById('friend-' + guestIndex + '-email');
     var otpField = document.getElementById('friend-' + guestIndex + '-otp');
     var sendStatusField = document.getElementById('friend-' + guestIndex + '-send-status');
     var verifyStatusField = document.getElementById('friend-' + guestIndex + '-verify-status');
     var otpBlockTarget = document.getElementById('friend-' + guestIndex + '-otp-block');
 
-    if (!phoneField || !otpField || !sendStatusField || !verifyStatusField || !otpBlockTarget) return;
+    if (!emailField || !otpField || !sendStatusField || !verifyStatusField || !otpBlockTarget) return;
 
-    var phone = phoneField.value.trim();
+    var email = emailField.value.trim();
 
     if (action === 'send') {
       sendStatusField.textContent = '';
       sendStatusField.className = 'otp-status';
-      if (!/^\+[1-9]\d{7,14}$/.test(phone)) {
-        sendStatusField.textContent = 'Friend ka phone number + country code ke saath likho.';
+      var friendEmailOkCheck = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      if (!friendEmailOkCheck) {
+        sendStatusField.textContent = 'Friend ka valid email likho.';
         return;
       }
-      if (!firebaseReady) {
-        sendStatusField.textContent = 'OTP service configure nahi hua hai.';
+      if (!emailjsReady) {
+        sendStatusField.textContent = 'Email verification configure nahi hua hai.';
         return;
       }
 
       target.disabled = true;
       target.textContent = 'Sending…';
       try {
-        var guestVerifier = getRecaptcha();
-        var friendResult = await firebase.auth().signInWithPhoneNumber(phone, guestVerifier);
-        window['friendConfirmationResult_' + guestIndex] = friendResult;
+        var friendCode = generateOtpCode();
+        await emailjs.send(emailjsConfig.serviceId, emailjsConfig.templateId, {
+          to_email: email,
+          otp_code: friendCode
+        });
+        window['friendCode_' + guestIndex] = friendCode;
+        window['friendCodeEmail_' + guestIndex] = email;
         otpBlockTarget.classList.add('show');
-        sendStatusField.textContent = 'Friend OTP bhej diya gaya.';
+        sendStatusField.textContent = 'Code friend ke email pe bhej diya gaya.';
         sendStatusField.className = 'otp-status ok';
       } catch (e) {
-        sendStatusField.textContent = 'Friend OTP send failed: ' + (e && e.message ? e.message : 'try again');
+        sendStatusField.textContent = 'Code send failed: ' + (e && e.text ? e.text : 'try again');
         sendStatusField.className = 'otp-status';
       }
       target.disabled = false;
-      target.textContent = 'Send OTP';
+      target.textContent = 'Send code';
       return;
     }
 
     if (action === 'verify') {
       var code = otpField.value.trim();
-      var friendResult = window['friendConfirmationResult_' + guestIndex];
+      var friendCode = window['friendCode_' + guestIndex];
+      var friendCodeEmail = window['friendCodeEmail_' + guestIndex];
       verifyStatusField.textContent = '';
       verifyStatusField.className = 'otp-status';
 
       if (!code || code.length < 4) {
-        verifyStatusField.textContent = 'Valid OTP daalo.';
+        verifyStatusField.textContent = 'Valid code daalo.';
         return;
       }
-      if (!friendResult) {
-        verifyStatusField.textContent = 'Pehle OTP bhejo.';
+      if (!friendCode) {
+        verifyStatusField.textContent = 'Pehle code bhejo.';
         return;
       }
 
       target.disabled = true;
       target.textContent = 'Verifying…';
-      try {
-        await friendResult.confirm(code);
-        verifyStatusField.textContent = 'Friend phone verified ✓';
+      if (code === friendCode && email === friendCodeEmail) {
+        verifyStatusField.textContent = 'Friend email verified ✓';
         verifyStatusField.className = 'otp-status ok';
-      } catch (e) {
-        verifyStatusField.textContent = 'Wrong OTP. Try again.';
+      } else {
+        verifyStatusField.textContent = 'Wrong code. Try again.';
         verifyStatusField.className = 'otp-status';
       }
       target.disabled = false;
@@ -1472,8 +1473,8 @@
       errorEl.textContent = 'Please fill in your name, email and phone number.';
       return;
     }
-    if (firebaseReady && !phoneVerified){
-      errorEl.textContent = 'Pehle apna phone number OTP se verify karo.';
+    if (emailjsReady && !emailVerified){
+      errorEl.textContent = 'Pehle apna email code se verify karo.';
       return;
     }
 
