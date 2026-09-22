@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,500&family=Jost:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <!-- EmailJS SDK for email OTP verification -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <style>
 
   :root {
@@ -475,25 +476,6 @@
     flex-wrap: wrap;
   }
   .payment-row strong { color: var(--gold-bright); }
-  .upi-box {
-    margin-top: 16px;
-    border: 1px solid var(--panel-line);
-    border-radius: var(--radius-s);
-    background: rgba(255,255,255,0.015);
-    padding: 16px;
-  }
-  .qr-box {
-    width: min(180px, 100%);
-    aspect-ratio: 1;
-    border: 1px solid var(--panel-line);
-    border-radius: var(--radius-s);
-    display: grid;
-    place-items: center;
-    font-family: var(--serif);
-    color: var(--gold-bright);
-    background: linear-gradient(180deg, rgba(201,163,90,0.12), rgba(201,163,90,0.03));
-    margin-bottom: 12px;
-  }
   .token-box {
     margin-top: 12px;
     background: rgba(143, 201, 138, 0.08);
@@ -688,7 +670,7 @@
   .detail-row .label { color: var(--pink); }
   .countdown-card .cd-label, .cd-unit .u { color: var(--violet); }
   .cd-unit .num, .guest-counter strong { color: var(--gold-bright); text-shadow: 0 0 20px rgba(255,189,104,0.28); }
-  .payment-box, .companion-card, .upi-box { background: rgba(12, 15, 34, 0.68); border-color: rgba(165,139,255,0.24); }
+  .payment-box, .companion-card { background: rgba(12, 15, 34, 0.68); border-color: rgba(165,139,255,0.24); }
   .ticket { border-color: var(--pink); background: linear-gradient(135deg, rgba(255,113,200,0.11), rgba(110,231,255,0.08)); }
 
   @media (prefers-reduced-motion: reduce) {
@@ -861,9 +843,7 @@
         <div class="full">
           <label for="f-payment-mode">Payment method</label>
           <select id="f-payment-mode" name="payment_mode">
-            <option value="manual">Pay on arrival</option>
-            <option value="upi">UPI / QR payment</option>
-            <option value="razorpay">Razorpay / online payment</option>
+            <option value="razorpay">Razorpay secure checkout</option>
           </select>
         </div>
 
@@ -874,14 +854,6 @@
               <div class="form-note" id="payment-note">Your entry token will be shared after confirmation.</div>
             </div>
             <button type="button" class="btn solid" id="pay-now-btn">Pay now</button>
-          </div>
-
-          <div class="upi-box" id="upi-box" style="display:none;">
-            <div class="qr-box">QR CODE</div>
-            <p style="margin:0 0 8px; color:var(--ink-dim);"><strong>UPI ID:</strong> eclipse.noir@upi</p>
-            <p style="margin:0 0 8px; color:var(--ink-dim);"><strong>Amount:</strong> ₹499</p>
-            <label for="payment-ref">Transaction / payment reference</label>
-            <input id="payment-ref" name="payment_ref" type="text" placeholder="Enter UPI txn ID or payment ref" maxlength="80">
           </div>
 
           <div id="token-box" class="token-box">Token will appear here</div>
@@ -1130,27 +1102,14 @@
     var title = document.getElementById('payment-title');
     var note = document.getElementById('payment-note');
     var paymentBox = document.getElementById('payment-box');
-    var upiBox = document.getElementById('upi-box');
-
     if (hiddenStatus) hiddenStatus.value = status || 'pending';
     if (hiddenToken) hiddenToken.value = token || '';
     if (paymentBox) paymentBox.classList.add('show');
-    if (upiBox) {
-      if (mode === 'upi') {
-        upiBox.style.display = 'block';
-      } else {
-        upiBox.style.display = 'none';
-      }
-    }
     if (title){
-      if (mode === 'upi') title.textContent = 'UPI / QR payment';
-      else if (mode === 'razorpay') title.textContent = 'Razorpay / online payment';
-      else title.textContent = 'Pay at the venue';
+      title.textContent = 'Razorpay secure checkout';
     }
     if (note){
-      if (mode === 'upi') note.textContent = 'Scan the QR or pay to the UPI ID shown below. Add the transaction reference.';
-      else if (mode === 'razorpay') note.textContent = 'Use Razorpay checkout to complete your pass payment.';
-      else note.textContent = 'Your entry token will be shared after confirmation.';
+      note.textContent = 'Pay securely with cards, UPI, wallets or QR methods available in Razorpay Checkout.';
     }
     if (tokenBox){
       if (token) {
@@ -1219,62 +1178,41 @@
   var paymentBox = document.getElementById('payment-box');
   var payNowBtn = document.getElementById('pay-now-btn');
   var paymentConfirmed = false;
+  var razorpayConfig = {
+    key: 'RAZORPAY_KEY_ID',
+    amount: 49900,
+    currency: 'INR'
+  };
 
   if (paymentMode){
     paymentMode.addEventListener('change', function(){
-      var mode = paymentMode.value;
       paymentConfirmed = false;
-      if (mode === 'manual') {
-        paymentBox.classList.remove('show');
-        setPaymentState('manual', 'pending', '');
-        return;
-      }
       paymentBox.classList.add('show');
-      setPaymentState(mode, 'pending', '');
+      setPaymentState('razorpay', 'pending', '');
     });
+    paymentBox.classList.add('show');
+    setPaymentState('razorpay', 'pending', '');
   }
 
   if (payNowBtn){
     payNowBtn.addEventListener('click', function(){
-      var mode = paymentMode ? paymentMode.value : 'manual';
+      var mode = paymentMode ? paymentMode.value : 'razorpay';
       var name = document.getElementById('f-name').value.trim();
-      var paymentRef = document.getElementById('payment-ref');
       if (!name) {
         errorEl.textContent = 'Please enter your name before payment.';
         return;
       }
 
-      if (mode === 'manual') {
-        var upiBox = document.getElementById('upi-box');
-        if (upiBox) upiBox.style.display = 'none';
-        setPaymentState('manual', 'pending', '');
-        errorEl.textContent = 'Pay on arrival selected. UPI/QR section is hidden.';
-        return;
-      }
-
-      if (mode === 'upi') {
-        if (!paymentRef || !paymentRef.value.trim()) {
-          errorEl.textContent = 'Please enter your UPI transaction ID.';
-          return;
-        }
-
-        var token = generateToken();
-        setPaymentState('upi', 'paid', token);
-        errorEl.textContent = 'Payment confirmed. Token generated successfully.';
-        paymentConfirmed = false;
-        return;
-      }
-
       if (mode === 'razorpay') {
-        if (!window.Razorpay) {
-          errorEl.textContent = 'Razorpay key not configured yet. Please use UPI mode or pay on arrival.';
+        if (!window.Razorpay || razorpayConfig.key === 'RAZORPAY_KEY_ID') {
+          errorEl.textContent = 'Razorpay setup incomplete hai. Apna Key ID code me add karo.';
           return;
         }
 
         var razorpayOptions = {
-          key: 'RAZORPAY_KEY_ID',
-          amount: 74900,
-          currency: 'INR',
+          key: razorpayConfig.key,
+          amount: razorpayConfig.amount,
+          currency: razorpayConfig.currency,
           name: 'Eclipse Noir 2K26',
           description: 'Freshers Night Pass',
           handler: function(response){
@@ -1288,7 +1226,12 @@
             email: document.getElementById('f-email').value.trim(),
             contact: document.getElementById('f-phone').value.trim()
           },
-          theme: { color: '#c9a35a' }
+          theme: { color: '#6ee7ff' },
+          modal: {
+            ondismiss: function(){
+              errorEl.textContent = 'Payment cancelled. You can try again.';
+            }
+          }
         };
 
         var razorpayInstance = new window.Razorpay(razorpayOptions);
@@ -1296,8 +1239,7 @@
         return;
       }
 
-      setPaymentState('manual', 'pending', '');
-      errorEl.textContent = 'Payment on arrival selected.';
+      errorEl.textContent = 'Please use Razorpay secure checkout.';
     });
   }
 
@@ -1533,8 +1475,6 @@
     var paymentModeValue = document.getElementById('f-payment-mode').value;
     var paymentStatusValue = document.getElementById('payment-status').value || 'pending';
     var paymentTokenValue = document.getElementById('payment-token').value || '';
-    var paymentRefValue = document.getElementById('payment-ref') ? document.getElementById('payment-ref').value.trim() : '';
-
     var entry = {
       name: name,
       email: email,
@@ -1544,7 +1484,6 @@
       paymentMode: paymentModeValue,
       paymentStatus: paymentStatusValue,
       paymentToken: paymentTokenValue,
-      paymentRef: paymentRefValue,
       createdAt: Date.now()
     };
 
