@@ -9,7 +9,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,500&family=Jost:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <!-- EmailJS SDK for email OTP verification -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <style>
 
   :root {
@@ -699,7 +698,7 @@
       <p class="lede">Step into a night of elegance, celebration and unforgettable memories — your first night among your new stars.</p>
       <a href="#rsvp" class="btn solid">Reserve your spot</a>
       <div class="event-strip">
-        <span class="item">📅 Wed, 7 Oct 2026</span>
+        <span class="item">📅 15 Oct 2026</span>
         <span class="dot"></span>
         <span class="item">🕖 1:00 PM onward</span>
         <span class="dot"></span>
@@ -726,9 +725,9 @@
         <p>Live sets till late</p>
       </div>
       <div class="feature">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><path d="M5 21l3-8 4 3 4-3 3 8"/><path d="M9 9l3-2 3 2"/></svg>
-        <h3>Dance Performances</h3>
-        <p>By your seniors</p>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M5 20V8l7-5 7 5v12"/><path d="M8 12h8"/><path d="M8 16h8"/></svg>
+        <h3>RIVER DECK DINING</h3>
+        <p>An Elegant Dining Experience Above the River</p>
       </div>
       <div class="feature">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2 3-2 2-2-2z"/><path d="M9 8l-4 12h14L15 8"/></svg>
@@ -736,9 +735,9 @@
         <p>Own the runway</p>
       </div>
       <div class="feature">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/><circle cx="12" cy="12" r="2.5"/></svg>
-        <h3>Fun Activities</h3>
-        <p>Games all evening</p>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M5 20V8l7-5 7 5v12"/><path d="M8 12h8"/><path d="M8 16h8"/></svg>
+        <h3>Riviera Location</h3>
+        <p>Belodi, Durg, 491001</p>
       </div>
       <div class="feature">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h4l2-2h4l2 2h4v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
@@ -761,11 +760,12 @@
     <div class="details">
       <p class="eyebrow-serif">THE ESSENTIALS</p>
       <h2 style="margin-top:14px;">Event details</h2>
-      <div class="detail-row"><div class="label">DATE</div><div class="value">Wed, 7 October 2026</div></div>
-      <div class="detail-row"><div class="label">TIME</div><div class="value">1:00 PM – 5:00 PM<small>Gates open 12:30 PM</small></div></div>
-      <div class="detail-row"><div class="label">VENUE</div><div class="value">Resort Riviera<small>Campus, Indore</small></div></div>
-      <div class="detail-row"><div class="label">DRESS</div><div class="value">Black &amp; gold formal<small>This is a noir affair — dress the part</small></div></div>
-      <div class="detail-row"><div class="label">ENTRY</div><div class="value">Free for freshers<small>Register below to confirm your seat</small></div></div>
+      <div class="detail-row"><div class="label">DATE</div><div class="value">15 October</div></div>
+      <div class="detail-row"><div class="label">TIME</div><div class="value">11:00 AM – 6:00 PM<small>Gates open 10:30 AM</small></div></div>
+      <div class="detail-row"><div class="label">VENUE</div><div class="value">Belodi, Durg, 491001<small>River Deck Dining, Belodi</small></div></div>
+      <div class="detail-row"><div class="label">DRESS</div><div class="value">Boys - Formal, Girls - Western<small>Dress the part and own the night</small></div></div>
+      <div class="detail-row"><div class="label">ENTRY</div><div class="value">Via Pass<small>Register below to confirm your seat</small></div></div>
+      <div class="detail-row"><div class="label">SUPPORT</div><div class="value"><a href="mailto:eclipsenoirsupportteam@gmail.com">eclipsenoirsupportteam@gmail.com</a><small>For registration help</small></div></div>
     </div>
 
     <div class="countdown-card">
@@ -819,55 +819,18 @@
             </div>
           </div>
           <div>
-            <label for="f-phone">Phone (with country code)</label>
-            <input id="f-phone" name="phone" type="tel" placeholder="+919XXXXXXXXX" autocomplete="tel" inputmode="tel" maxlength="20" required>
-          </div>
-          <div>
             <label for="f-branch">Branch / Course</label>
             <input id="f-branch" name="branch" type="text" placeholder="e.g. CSE, B.Com" maxlength="80">
           </div>
-          <div>
-            <label for="f-guests">Coming with</label>
-            <select id="f-guests" name="guests">
-              <option value="Just me">Just me</option>
-              <option value="With 1 friend">With 1 friend</option>
-              <option value="With 2+ friends">With 2+ friends</option>
-            </select>
-          </div>
-        </div>
-
-        <div id="companion-container" class="companion-container">
-          <div id="companion-fields"></div>
-        </div>
-
-        <div class="full">
-          <label for="f-payment-mode">Payment method</label>
-          <select id="f-payment-mode" name="payment_mode">
-            <option value="razorpay">Razorpay secure checkout</option>
-          </select>
-        </div>
-
-        <div class="full payment-box" id="payment-box">
-          <div class="payment-row">
-            <div>
-              <strong id="payment-title">Pay at the venue</strong>
-              <div class="form-note" id="payment-note">Your entry token will be shared after confirmation.</div>
-            </div>
-            <button type="button" class="btn solid" id="pay-now-btn">Pay now</button>
-          </div>
-
-          <div id="token-box" class="token-box">Token will appear here</div>
         </div>
 
         <label for="form-website" class="visually-hidden">Leave this field empty</label>
         <input id="form-website" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
         <input type="hidden" name="_subject" value="Eclipse Noir RSVP">
-        <input type="hidden" name="email_verified" id="phone-verified-field" value="no">
-        <input type="hidden" name="payment_status" id="payment-status" value="pending">
-        <input type="hidden" name="payment_token" id="payment-token" value="">
+        <input type="hidden" name="email_verified" id="email-verified-field" value="no">
         <div class="form-actions">
           <button type="submit" class="btn solid" id="submit-btn" disabled>Confirm my spot</button>
-          <span class="form-note">Verify your phone number above first.</span>
+          <span class="form-note">Verify your email above first.</span>
         </div>
         <p class="form-error" id="form-error" role="alert"></p>
       </form>
@@ -878,7 +841,7 @@
         <p style="color:var(--ink-dim)">Save this confirmation — show it at the entrance.</p>
         <div class="ticket">
           <div class="t-name" id="ticket-name">—</div>
-          <div style="color:var(--ink-faint); font-size:0.85rem; margin-top:6px;">Eclipse Noir 2K26 · Wed, 7 Oct · 1:00 PM</div>
+          <div style="color:var(--ink-faint); font-size:0.85rem; margin-top:6px;">Eclipse Noir 2K26 · 15 Oct · 11:00 AM</div>
           <div class="t-id" id="ticket-id">—</div>
         </div>
       </div>
@@ -902,7 +865,7 @@
     <div class="admin-table-wrap">
       <table>
         <thead>
-          <tr><th>Name</th><th>Email</th><th>Phone</th><th>Branch</th><th>Guests</th><th>Registered</th></tr>
+          <tr><th>Name</th><th>Email</th><th>Branch</th><th>Registered</th></tr>
         </thead>
         <tbody id="admin-rows"></tbody>
       </table>
@@ -914,7 +877,7 @@
 (function(){
   "use strict";
 
-  var EVENT_DATE = new Date("2026-10-07T13:00:00");
+  var EVENT_DATE = new Date("2026-10-15T11:00:00");
   function tick(){
     var now = new Date();
     var diff = EVENT_DATE - now;
@@ -1039,14 +1002,12 @@
       var tr = document.createElement('tr');
       var when = '';
       try { when = e.createdAt ? new Date(e.createdAt).toLocaleString() : ''; } catch(err){ when = ''; }
-      tr.innerHTML = '<td></td><td></td><td></td><td></td><td></td><td></td>';
+      tr.innerHTML = '<td></td><td></td><td></td><td></td>';
       var cells = tr.querySelectorAll('td');
       cells[0].textContent = e.name || '—';
       cells[1].textContent = e.email || '—';
-      cells[2].textContent = e.phone || '—';
-      cells[3].textContent = e.branch || '—';
-      cells[4].textContent = e.guests || '—';
-      cells[5].textContent = when;
+      cells[2].textContent = e.branch || '—';
+      cells[3].textContent = when;
       rowsEl.appendChild(tr);
     });
   }
@@ -1093,154 +1054,6 @@
 
   function generateOtpCode(){
     return String(Math.floor(100000 + Math.random() * 900000));
-  }
-
-  function setPaymentState(mode, status, token){
-    var hiddenStatus = document.getElementById('payment-status');
-    var hiddenToken = document.getElementById('payment-token');
-    var tokenBox = document.getElementById('token-box');
-    var title = document.getElementById('payment-title');
-    var note = document.getElementById('payment-note');
-    var paymentBox = document.getElementById('payment-box');
-    if (hiddenStatus) hiddenStatus.value = status || 'pending';
-    if (hiddenToken) hiddenToken.value = token || '';
-    if (paymentBox) paymentBox.classList.add('show');
-    if (title){
-      title.textContent = 'Razorpay secure checkout';
-    }
-    if (note){
-      note.textContent = 'Pay securely with cards, UPI, wallets or QR methods available in Razorpay Checkout.';
-    }
-    if (tokenBox){
-      if (token) {
-        tokenBox.textContent = 'Token: ' + token;
-        tokenBox.classList.add('show');
-      } else {
-        tokenBox.textContent = 'Token will appear here';
-        tokenBox.classList.remove('show');
-      }
-    }
-  }
-
-  function renderCompanionFields(){
-    var guestType = document.getElementById('f-guests').value;
-    var count = guestType === 'With 1 friend' ? 1 : guestType === 'With 2+ friends' ? 2 : 0;
-    var container = document.getElementById('companion-container');
-    var fields = document.getElementById('companion-fields');
-
-    if (!container || !fields) return;
-    container.classList.toggle('show', count > 0);
-    fields.innerHTML = '';
-
-    for (var i = 1; i <= count; i++) {
-      var idx = i;
-      fields.insertAdjacentHTML('beforeend', [
-        '<div class="companion-card">',
-        '  <div class="companion-title">Friend ' + idx + ' details</div>',
-        '  <div class="form-grid">',
-        '    <div class="full">',
-        '      <label for="friend-' + idx + '-name">Friend ' + idx + ' name</label>',
-        '      <input id="friend-' + idx + '-name" name="friend_' + idx + '_name" type="text" maxlength="100" placeholder="Friend ' + idx + ' name" required>',
-        '    </div>',
-        '    <div>',
-        '      <label for="friend-' + idx + '-email">Friend ' + idx + ' email</label>',
-        '      <div class="phone-row">',
-        '        <input id="friend-' + idx + '-email" name="friend_' + idx + '_email" type="email" maxlength="254" placeholder="friend' + idx + '@example.com" required>',
-        '        <button type="button" class="btn-otp" data-guest-index="' + idx + '" data-action="send">Send code</button>',
-        '      </div>',
-        '      <p class="otp-status" id="friend-' + idx + '-send-status"></p>',
-        '      <div class="otp-block" id="friend-' + idx + '-otp-block">',
-        '        <label for="friend-' + idx + '-otp">Enter code for friend ' + idx + '</label>',
-        '        <div class="phone-row">',
-        '          <input id="friend-' + idx + '-otp" type="text" inputmode="numeric" maxlength="6" placeholder="6-digit code">',
-        '          <button type="button" class="btn-otp" data-guest-index="' + idx + '" data-action="verify">Verify</button>',
-        '        </div>',
-        '        <p class="otp-status" id="friend-' + idx + '-verify-status"></p>',
-        '      </div>',
-        '    </div>',
-        '    <div>',
-        '      <label for="friend-' + idx + '-phone">Friend ' + idx + ' phone</label>',
-        '      <input id="friend-' + idx + '-phone" name="friend_' + idx + '_phone" type="tel" maxlength="20" placeholder="+919XXXXXXXXX" required>',
-        '    </div>',
-        '    <div>',
-        '      <label for="friend-' + idx + '-branch">Friend ' + idx + ' branch</label>',
-        '      <input id="friend-' + idx + '-branch" name="friend_' + idx + '_branch" type="text" maxlength="80" placeholder="e.g. BBA, CSE" required>',
-        '    </div>',
-        '  </div>',
-        '</div>'
-      ].join(''));
-    }
-  }
-
-  document.getElementById('f-guests').addEventListener('change', renderCompanionFields);
-
-  var paymentMode = document.getElementById('f-payment-mode');
-  var paymentBox = document.getElementById('payment-box');
-  var payNowBtn = document.getElementById('pay-now-btn');
-  var paymentConfirmed = false;
-  var razorpayConfig = {
-    key: 'RAZORPAY_KEY_ID',
-    amount: 49900,
-    currency: 'INR'
-  };
-
-  if (paymentMode){
-    paymentMode.addEventListener('change', function(){
-      paymentConfirmed = false;
-      paymentBox.classList.add('show');
-      setPaymentState('razorpay', 'pending', '');
-    });
-    paymentBox.classList.add('show');
-    setPaymentState('razorpay', 'pending', '');
-  }
-
-  if (payNowBtn){
-    payNowBtn.addEventListener('click', function(){
-      var mode = paymentMode ? paymentMode.value : 'razorpay';
-      var name = document.getElementById('f-name').value.trim();
-      if (!name) {
-        errorEl.textContent = 'Please enter your name before payment.';
-        return;
-      }
-
-      if (mode === 'razorpay') {
-        if (!window.Razorpay || razorpayConfig.key === 'RAZORPAY_KEY_ID') {
-          errorEl.textContent = 'Razorpay setup incomplete hai. Apna Key ID code me add karo.';
-          return;
-        }
-
-        var razorpayOptions = {
-          key: razorpayConfig.key,
-          amount: razorpayConfig.amount,
-          currency: razorpayConfig.currency,
-          name: 'Eclipse Noir 2K26',
-          description: 'Freshers Night Pass',
-          handler: function(response){
-            var token = generateToken();
-            setPaymentState('razorpay', 'paid', token);
-            errorEl.textContent = 'Payment successful. Token generated.';
-            paymentConfirmed = false;
-          },
-          prefill: {
-            name: name,
-            email: document.getElementById('f-email').value.trim(),
-            contact: document.getElementById('f-phone').value.trim()
-          },
-          theme: { color: '#6ee7ff' },
-          modal: {
-            ondismiss: function(){
-              errorEl.textContent = 'Payment cancelled. You can try again.';
-            }
-          }
-        };
-
-        var razorpayInstance = new window.Razorpay(razorpayOptions);
-        razorpayInstance.open();
-        return;
-      }
-
-      errorEl.textContent = 'Please use Razorpay secure checkout.';
-    });
   }
 
   if (sendOtpBtn){
@@ -1301,7 +1114,7 @@
         verifyStatus.textContent = 'Email verified ✓';
         verifyStatus.className = 'otp-status ok';
         emailInput.setAttribute('readonly', 'readonly');
-        var verifiedField = document.getElementById('phone-verified-field');
+        var verifiedField = document.getElementById('email-verified-field');
         if (verifiedField) verifiedField.value = 'yes';
         setSubmitEnabled(true);
       } else {
@@ -1313,89 +1126,6 @@
     });
   }
 
-  document.addEventListener('click', async function(event){
-    var target = event.target;
-    if (!target || !target.matches('.btn-otp')) return;
-
-    var action = target.dataset.action;
-    var guestIndex = Number(target.dataset.guestIndex || 0);
-    if (!guestIndex || !action) return;
-
-    var emailField = document.getElementById('friend-' + guestIndex + '-email');
-    var otpField = document.getElementById('friend-' + guestIndex + '-otp');
-    var sendStatusField = document.getElementById('friend-' + guestIndex + '-send-status');
-    var verifyStatusField = document.getElementById('friend-' + guestIndex + '-verify-status');
-    var otpBlockTarget = document.getElementById('friend-' + guestIndex + '-otp-block');
-
-    if (!emailField || !otpField || !sendStatusField || !verifyStatusField || !otpBlockTarget) return;
-
-    var email = emailField.value.trim();
-
-    if (action === 'send') {
-      sendStatusField.textContent = '';
-      sendStatusField.className = 'otp-status';
-      var friendEmailOkCheck = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-      if (!friendEmailOkCheck) {
-        sendStatusField.textContent = 'Friend ka valid email likho.';
-        return;
-      }
-      if (!emailjsReady) {
-        sendStatusField.textContent = 'Email verification configure nahi hua hai.';
-        return;
-      }
-
-      target.disabled = true;
-      target.textContent = 'Sending…';
-      try {
-        var friendCode = generateOtpCode();
-        await emailjs.send(emailjsConfig.serviceId, emailjsConfig.templateId, {
-          to_email: email,
-          otp_code: friendCode
-        });
-        window['friendCode_' + guestIndex] = friendCode;
-        window['friendCodeEmail_' + guestIndex] = email;
-        otpBlockTarget.classList.add('show');
-        sendStatusField.textContent = 'Code friend ke email pe bhej diya gaya.';
-        sendStatusField.className = 'otp-status ok';
-      } catch (e) {
-        sendStatusField.textContent = 'Code send failed: ' + (e && e.text ? e.text : 'try again');
-        sendStatusField.className = 'otp-status';
-      }
-      target.disabled = false;
-      target.textContent = 'Send code';
-      return;
-    }
-
-    if (action === 'verify') {
-      var code = otpField.value.trim();
-      var friendCode = window['friendCode_' + guestIndex];
-      var friendCodeEmail = window['friendCodeEmail_' + guestIndex];
-      verifyStatusField.textContent = '';
-      verifyStatusField.className = 'otp-status';
-
-      if (!code || code.length < 4) {
-        verifyStatusField.textContent = 'Valid code daalo.';
-        return;
-      }
-      if (!friendCode) {
-        verifyStatusField.textContent = 'Pehle code bhejo.';
-        return;
-      }
-
-      target.disabled = true;
-      target.textContent = 'Verifying…';
-      if (code === friendCode && email === friendCodeEmail) {
-        verifyStatusField.textContent = 'Friend email verified ✓';
-        verifyStatusField.className = 'otp-status ok';
-      } else {
-        verifyStatusField.textContent = 'Wrong code. Try again.';
-        verifyStatusField.className = 'otp-status';
-      }
-      target.disabled = false;
-      target.textContent = 'Verify';
-    }
-  });
-
   var form = document.getElementById('rsvp-form');
   var errorEl = document.getElementById('form-error');
   var submitBtn = document.getElementById('submit-btn');
@@ -1406,12 +1136,10 @@
 
     var name = document.getElementById('f-name').value.trim();
     var email = document.getElementById('f-email').value.trim();
-    var phone = document.getElementById('f-phone').value.trim();
     var branch = document.getElementById('f-branch').value.trim();
-    var guests = document.getElementById('f-guests').value;
 
-    if (!name || !email || !phone){
-      errorEl.textContent = 'Please fill in your name, email and phone number.';
+    if (!name || !email){
+      errorEl.textContent = 'Please fill in your name and email.';
       return;
     }
     if (emailjsReady && !emailVerified){
@@ -1419,71 +1147,23 @@
       return;
     }
 
-    var selectedGuestType = document.getElementById('f-guests').value;
-    var guestCount = selectedGuestType === 'With 1 friend' ? 1 : selectedGuestType === 'With 2+ friends' ? 2 : 0;
-    for (var i = 1; i <= guestCount; i++) {
-      var friendName = document.getElementById('friend-' + i + '-name');
-      var friendEmail = document.getElementById('friend-' + i + '-email');
-      var friendPhone = document.getElementById('friend-' + i + '-phone');
-      var friendBranch = document.getElementById('friend-' + i + '-branch');
-      var friendVerify = document.getElementById('friend-' + i + '-verify-status');
-
-      if (!friendName || !friendEmail || !friendPhone || !friendBranch || !friendVerify) {
-        errorEl.textContent = 'Friend details incomplete. Please complete every field.';
-        return;
-      }
-
-      if (!friendName.value.trim() || !friendEmail.value.trim() || !friendPhone.value.trim() || !friendBranch.value.trim()) {
-        errorEl.textContent = 'Har friend ke name, email, phone, aur branch bharna zaroori hai.';
-        return;
-      }
-
-      var friendEmailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(friendEmail.value.trim());
-      if (!friendEmailOk) {
-        errorEl.textContent = 'A friend email looks invalid. Please check it again.';
-        return;
-      }
-
-      if (!/^[0-9+() -]{7,20}$/.test(friendPhone.value.trim())) {
-        errorEl.textContent = 'Friend phone number valid nahi hai.';
-        return;
-      }
-
-      if (friendVerify.textContent.indexOf('verified') === -1) {
-        errorEl.textContent = 'Har friend ka phone OTP verify zaroor karo.';
-        return;
-      }
-    }
-
     var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     if (!emailOk){
       errorEl.textContent = 'That email address doesn\'t look right.';
       return;
     }
-    if (name.length > 100 || branch.length > 80 || phone.length > 20){
+    if (name.length > 100 || branch.length > 80){
       errorEl.textContent = 'Please keep the entered details within the allowed length.';
-      return;
-    }
-    if (!/^[0-9+() -]{7,20}$/.test(phone)){
-      errorEl.textContent = 'Please enter a valid phone number.';
       return;
     }
 
     submitBtn.disabled = true;
     submitBtn.textContent = 'Confirming…';
 
-    var paymentModeValue = document.getElementById('f-payment-mode').value;
-    var paymentStatusValue = document.getElementById('payment-status').value || 'pending';
-    var paymentTokenValue = document.getElementById('payment-token').value || '';
     var entry = {
       name: name,
       email: email,
-      phone: phone,
       branch: branch,
-      guests: guests,
-      paymentMode: paymentModeValue,
-      paymentStatus: paymentStatusValue,
-      paymentToken: paymentTokenValue,
       createdAt: Date.now()
     };
 
@@ -1502,7 +1182,7 @@
       return;
     }
 
-    var ticketId = paymentTokenValue || genId();
+    var ticketId = genId();
     document.getElementById('ticket-name').textContent = name;
     document.getElementById('ticket-id').textContent = 'Token: ' + ticketId;
     form.style.display = 'none';
