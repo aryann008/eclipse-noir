@@ -700,7 +700,7 @@
       <div class="event-strip">
         <span class="item">📅 15 Oct 2026</span>
         <span class="dot"></span>
-        <span class="item">🕖 1:00 PM onward</span>
+        <span class="item">🕖 11:00 AM onward</span>
         <span class="dot"></span>
         <span class="item">📍 Resort Riviera</span>
       </div>
@@ -939,19 +939,22 @@
     maybeShowAdminEntry();
   }
 
-  function watchGuestCount(){
+  async function refreshGuestCount(){
     var countEl = document.getElementById('guest-count');
-    if (db){
-      try {
-        db.collection('registrations').limit(999).onSnapshot(function(snap){
-          countEl.textContent = snap.size ?? (snap.docs ? snap.docs.length : '—');
-        }, function(err){
-          countEl.textContent = localList().length;
-        });
-        return;
-      } catch(e){ }
+    try {
+      var response = await fetch('/api/registrations');
+      if (!response.ok) throw new Error('Server unavailable');
+      var payload = await response.json();
+      var count = Array.isArray(payload.registrations) ? payload.registrations.length : 0;
+      countEl.textContent = count;
+      return;
+    } catch (e) {
+      countEl.textContent = localList().length;
     }
-    countEl.textContent = localList().length;
+  }
+
+  function watchGuestCount(){
+    refreshGuestCount();
   }
 
   async function maybeShowAdminEntry(){
@@ -980,22 +983,20 @@
     var statusEl = document.getElementById('admin-status');
     rowsEl.innerHTML = '';
     var entries = [];
-    if (db){
-      try {
-        var snap = await db.collection('registrations').orderBy('createdAt','desc').limit(500).get();
-        var docs = snap.docs || [];
-        entries = docs.map(function(d){ return d.data ? d.data() : d; });
-        statusEl.textContent = entries.length + ' registration(s) synced from the shared guest list.';
-      } catch(e){
-        entries = localList();
-        statusEl.textContent = entries.length + ' registration(s) found on this device (shared list unavailable).';
-      }
-    } else {
+
+    try {
+      var response = await fetch('/api/registrations');
+      if (!response.ok) throw new Error('Server unavailable');
+      var payload = await response.json();
+      entries = Array.isArray(payload.registrations) ? payload.registrations : [];
+      statusEl.textContent = entries.length + ' registration(s) synced from the server.';
+    } catch (e) {
       entries = localList();
-      statusEl.textContent = entries.length + ' registration(s) found on this device.';
+      statusEl.textContent = entries.length + ' registration(s) found on this device (server unavailable).';
     }
+
     if (entries.length === 0){
-      rowsEl.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--ink-faint);">No registrations yet.</td></tr>';
+      rowsEl.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--ink-faint);">No registrations yet.</td></tr>';
       return;
     }
     entries.forEach(function(e){
@@ -1168,15 +1169,26 @@
     };
 
     try {
-      var response = await fetch(form.action, {
+      var response = await fetch('/api/register', {
         method: 'POST',
-        body: new FormData(form),
-        headers: { Accept: 'application/json' }
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          branch: branch,
+          email_verified: document.getElementById('email-verified-field') ? document.getElementById('email-verified-field').value : 'no'
+        })
       });
-      if (!response.ok) { throw new Error('Form submission failed'); }
+      if (!response.ok) {
+        var serverErr = await response.json().catch(function(){ return {}; });
+        throw new Error(serverErr.error || 'Form submission failed');
+      }
       localAdd(entry);
     } catch (e) {
-      errorEl.textContent = 'Registration send nahi ho payi. Please try again.';
+      errorEl.textContent = e && e.message ? e.message : 'Registration send nahi ho payi. Please try again.';
       submitBtn.disabled = false;
       submitBtn.textContent = 'Confirm my spot';
       return;
