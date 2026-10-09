@@ -762,7 +762,7 @@
       <h2 style="margin-top:14px;">Event details</h2>
       <div class="detail-row"><div class="label">DATE</div><div class="value">15 October</div></div>
       <div class="detail-row"><div class="label">TIME</div><div class="value">11:00 AM – 6:00 PM<small>Gates open 10:30 AM</small></div></div>
-      <div class="detail-row"><div class="label">VENUE</div><div class="value">Belodi, Durg, 491001<small>River Deck Dining, Belodi</small></div></div>
+      <div class="detail-row"><div class="label">VENUE</div><div class="value">Belodi, Durg, 491001</div></div>
       <div class="detail-row"><div class="label">DRESS</div><div class="value">Boys - Formal, Girls - Western<small>Dress the part and own the night</small></div></div>
       <div class="detail-row"><div class="label">ENTRY</div><div class="value">Via Pass<small>Register below to confirm your seat</small></div></div>
       <div class="detail-row"><div class="label">SUPPORT</div><div class="value"><a href="mailto:eclipsenoirsupportteam@gmail.com">eclipsenoirsupportteam@gmail.com</a><small>For registration help</small></div></div>
@@ -821,6 +821,10 @@
           <div>
             <label for="f-branch">Branch / Course</label>
             <input id="f-branch" name="branch" type="text" placeholder="e.g. CSE, B.Com" maxlength="80">
+          </div>
+          <div>
+            <label for="f-phone">Phone number (optional)</label>
+            <input id="f-phone" name="phone" type="tel" placeholder="Your phone number" autocomplete="tel" maxlength="20">
           </div>
         </div>
 
@@ -1138,6 +1142,7 @@
     var name = document.getElementById('f-name').value.trim();
     var email = document.getElementById('f-email').value.trim();
     var branch = document.getElementById('f-branch').value.trim();
+    var phone = document.getElementById('f-phone').value.trim();
 
     if (!name || !email){
       errorEl.textContent = 'Please fill in your name and email.';
@@ -1157,6 +1162,10 @@
       errorEl.textContent = 'Please keep the entered details within the allowed length.';
       return;
     }
+    if (phone && !/^[0-9+() -]{7,20}$/.test(phone)){
+      errorEl.textContent = 'Please enter a valid phone number or leave it blank.';
+      return;
+    }
 
     submitBtn.disabled = true;
     submitBtn.textContent = 'Confirming…';
@@ -1164,6 +1173,7 @@
     var entry = {
       name: name,
       email: email,
+      phone: phone,
       branch: branch,
       createdAt: Date.now()
     };
@@ -1178,6 +1188,7 @@
         body: JSON.stringify({
           name: name,
           email: email,
+          phone: phone,
           branch: branch,
           email_verified: document.getElementById('email-verified-field') ? document.getElementById('email-verified-field').value : 'no'
         })
