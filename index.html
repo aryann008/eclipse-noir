@@ -1134,6 +1134,9 @@
   var form = document.getElementById('rsvp-form');
   var errorEl = document.getElementById('form-error');
   var submitBtn = document.getElementById('submit-btn');
+  var isLocalPreview = window.location.protocol === 'file:' ||
+    ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && window.location.port !== '3000');
+  var registrationApiUrl = (isLocalPreview ? 'http://localhost:3000' : '') + '/api/register';
 
   form.addEventListener('submit', async function(ev){
     ev.preventDefault();
@@ -1179,7 +1182,7 @@
     };
 
     try {
-      var response = await fetch('/api/register', {
+      var response = await fetch(registrationApiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
